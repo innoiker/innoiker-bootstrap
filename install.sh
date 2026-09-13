@@ -85,17 +85,24 @@ install_bootstrap_cli() {
   asdf exec python -m pip install --upgrade 'pip<26'
   asdf exec python -m pip install --force-reinstall "$INSTALL_ROOT"
 
-  # asdf의 실행 파일 탐색에 의존하지 않고 설치된 Python 환경에서
-  # 실제 console script를 사용자 PATH에 materialize한다.
-  local python_bin console_script
+  # 설치된 Python이 실제로 사용하는 scripts 디렉터리를 기준으로
+  # console script를 확인한다. asdf shim이나 현재 셸의 PATH에는 의존하지 않는다.
+  local python_bin scripts_dir console_script
   python_bin="$(asdf which python)"
-  console_script="$(dirname "$python_bin")/innoiker"
+  scripts_dir="$(asdf exec python -c 'import sysconfig; print(sysconfig.get_path("scripts"))')"
+  console_script="$scripts_dir/innoiker"
+  if [ ! -x "$python_bin" ]; then
+    fail "asdf Python 실행 파일을 찾을 수 없습니다: $python_bin"
+  fi
   if [ ! -x "$console_script" ]; then
     fail "innoiker CLI가 Python 환경에 설치되지 않았습니다: $console_script"
   fi
   mkdir -p "$BIN_DIR"
-  ln -sfn "$console_script" "$BIN_DIR/innoiker"
-  chmod +x "$console_script"
+  cp -f "$console_script" "$BIN_DIR/innoiker"
+  chmod 0755 "$BIN_DIR/innoiker"
+
+  # 설치된 CLI가 참조하는 Python 환경이 유지되는지 확인한다.
+  "$BIN_DIR/innoiker" --version >/dev/null
 }
 
 verify_installation() {
