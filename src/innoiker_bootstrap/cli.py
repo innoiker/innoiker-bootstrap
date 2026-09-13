@@ -9,7 +9,7 @@ from . import __version__
 from .config import Config, build_config
 from .create import create_project
 from .doctor import check, healthy
-from .environment import ensure_agent_os, ensure_openspec, ensure_python_tools, ensure_runtimes, verify_host
+from .environment import ensure_openspec, ensure_python_tools, ensure_runtimes, verify_host
 from .organization import ensure_checkout, ensure_template_checkout
 from .toolchain import read_template_tool_versions, read_toolchain_lock
 
@@ -54,7 +54,6 @@ def command_bootstrap(config: Config) -> int:
     ensure_runtimes({"python": toolchain.python, "nodejs": toolchain.nodejs})
     ensure_python_tools(toolchain)
     ensure_openspec(toolchain)
-    ensure_agent_os(config, toolchain.agent_os_ref)
     report = check(config, toolchain, template_tools)
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0 if healthy(report) else 1

@@ -22,13 +22,6 @@ def check(config: Config, toolchain: Toolchain, template_tools: dict[str, str] |
         except Exception as exc:
             checks[name] = {"ok": False, "error": str(exc)}
 
-    profile = config.agent_os_dir / "profiles" / config.agent_os_profile
-    checks["agent_os"] = {
-        "ok": (config.agent_os_dir / "scripts" / "project-install.sh").is_file(),
-        "path": str(config.agent_os_dir),
-        "profile": config.agent_os_profile,
-        "profile_exists": profile.is_dir(),
-    }
     checks["organization"] = {
         "ok": (config.organization_repo / ".git").is_dir(),
         "path": str(config.organization_repo),
@@ -61,10 +54,6 @@ def check(config: Config, toolchain: Toolchain, template_tools: dict[str, str] |
             normalized = actual.removeprefix("v")
             checks[name]["expected"] = version
             checks[name]["ok"] = checks[name].get("ok", False) and version in normalized
-        if (config.agent_os_dir / ".git").is_dir():
-            checks["agent_os"]["revision"] = current_revision(config.agent_os_dir)
-            checks["agent_os"]["expected_revision"] = toolchain.agent_os_ref
-            checks["agent_os"]["ok"] = checks["agent_os"].get("ok", False) and checks["agent_os"]["revision"] == toolchain.agent_os_ref
     checks["platforms"] = list(config.platforms)
     checks["organization_profile"] = config.organization_profile
     return checks
