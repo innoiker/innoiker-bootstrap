@@ -75,7 +75,13 @@ def ensure_python_tools(toolchain: Toolchain) -> None:
 
 def ensure_openspec(toolchain: Toolchain) -> None:
     npm = _command("asdf", "exec", "npm")
-    run([*npm, "install", "--global", f"@fission-ai/openspec@{toolchain.openspec}"])
+    env = os.environ.copy()
+    env["npm_config_fund"] = "false"
+    subprocess.run(
+        [*npm, "install", "--global", f"@fission-ai/openspec@{toolchain.openspec}"],
+        check=True,
+        env=env,
+    )
     run(_command("asdf", "reshim", "nodejs"))
 
 
