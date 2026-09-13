@@ -118,7 +118,9 @@ main() {
   clone_bootstrap
   install_bootstrap_cli
   verify_installation
-  say '설치 완료.'
+  say 'Innoiker 환경을 bootstrap합니다.'
+  "$BIN_DIR/innoiker" bootstrap
+  say '설치 및 bootstrap 완료.'
   say "export PATH=\"$BIN_DIR:\$PATH\""
   say 'innoiker doctor'
   say 'innoiker create my-project'
