@@ -111,7 +111,7 @@ innoiker create my-project --platforms android,web,server
 macOS / Linux:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/innoiker/innoiker-bootstrap/main/installer/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/innoiker/innoiker-bootstrap/main/install.sh | bash
 ```
 
 Windows PowerShell:
