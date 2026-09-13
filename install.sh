@@ -83,8 +83,25 @@ install_bootstrap_cli() {
   asdf set -u python 3.14.7
   asdf set -u nodejs 24.20.0
   asdf exec python -m pip install --upgrade 'pip<26'
-  asdf exec python -m pip install "$INSTALL_ROOT"
-  asdf reshim python
+  asdf exec python -m pip install --force-reinstall "$INSTALL_ROOT"
+
+  # asdf의 실행 파일 탐색에 의존하지 않고 설치된 Python 환경에서
+  # 실제 console script를 사용자 PATH에 materialize한다.
+  local python_bin console_script
+  python_bin="$(asdf which python)"
+  console_script="$(dirname "$python_bin")/innoiker"
+  if [ ! -x "$console_script" ]; then
+    fail "innoiker CLI가 Python 환경에 설치되지 않았습니다: $console_script"
+  fi
+  mkdir -p "$BIN_DIR"
+  ln -sfn "$console_script" "$BIN_DIR/innoiker"
+  chmod +x "$console_script"
+}
+
+verify_installation() {
+  local cli="$BIN_DIR/innoiker"
+  [ -x "$cli" ] || fail "설치 후 innoiker 실행 파일을 찾을 수 없습니다: $cli"
+  "$cli" --version >/dev/null || fail 'innoiker CLI 실행 검증에 실패했습니다.'
 }
 
 main() {
@@ -93,6 +110,7 @@ main() {
   prepare_path
   clone_bootstrap
   install_bootstrap_cli
+  verify_installation
   say '설치 완료.'
   say "export PATH=\"$BIN_DIR:\$PATH\""
   say 'innoiker doctor'
