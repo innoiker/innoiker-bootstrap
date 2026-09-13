@@ -100,7 +100,7 @@ def command_doctor(config: Config, as_json: bool) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="innoiker", description="Innoiker host bootstrapper")
+    parser = argparse.ArgumentParser(prog="inno", description="Innoiker host bootstrapper")
     parser.add_argument("--version", action="version", version=__version__)
     sub = parser.add_subparsers(dest="command", required=True)
 

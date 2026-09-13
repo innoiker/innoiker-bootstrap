@@ -91,25 +91,25 @@ install_bootstrap_cli() {
   local python_bin scripts_dir console_script
   python_bin="$(asdf which python)"
   scripts_dir="$(asdf exec python -c 'import sysconfig; print(sysconfig.get_path("scripts"))')"
-  console_script="$scripts_dir/innoiker"
+  console_script="$scripts_dir/inno"
   if [ ! -x "$python_bin" ]; then
     fail "asdf Python 실행 파일을 찾을 수 없습니다: $python_bin"
   fi
   if [ ! -x "$console_script" ]; then
-    fail "innoiker CLI가 Python 환경에 설치되지 않았습니다: $console_script"
+    fail "inno CLI가 Python 환경에 설치되지 않았습니다: $console_script"
   fi
   mkdir -p "$BIN_DIR"
-  cp -f "$console_script" "$BIN_DIR/innoiker"
-  chmod 0755 "$BIN_DIR/innoiker"
+  cp -f "$console_script" "$BIN_DIR/inno"
+  chmod 0755 "$BIN_DIR/inno"
 
   # 설치된 CLI가 참조하는 Python 환경이 유지되는지 확인한다.
-  "$BIN_DIR/innoiker" --version >/dev/null
+  "$BIN_DIR/inno" --version >/dev/null
 }
 
 verify_installation() {
-  local cli="$BIN_DIR/innoiker"
-  [ -x "$cli" ] || fail "설치 후 innoiker 실행 파일을 찾을 수 없습니다: $cli"
-  "$cli" --version >/dev/null || fail 'innoiker CLI 실행 검증에 실패했습니다.'
+  local cli="$BIN_DIR/inno"
+  [ -x "$cli" ] || fail "설치 후 inno 실행 파일을 찾을 수 없습니다: $cli"
+  "$cli" --version >/dev/null || fail 'inno CLI 실행 검증에 실패했습니다.'
 }
 
 main() {
@@ -120,11 +120,11 @@ main() {
   install_bootstrap_cli
   verify_installation
   say 'Innoiker 환경을 bootstrap합니다.'
-  "$BIN_DIR/innoiker" bootstrap
+  "$BIN_DIR/inno" bootstrap
   say '설치 및 bootstrap 완료.'
   say "export PATH=\"$BIN_DIR:\$PATH\""
-  say 'innoiker doctor'
-  say 'innoiker create my-project'
+  say 'inno doctor'
+  say 'inno create my-project'
 }
 
 main "$@"

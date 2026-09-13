@@ -16,5 +16,5 @@ $command = "curl -fsSL '$escapedUrl' | bash"
 & wsl.exe bash -lc $command
 
 Write-Info '설치 완료. WSL 터미널에서 다음을 실행하세요:'
-Write-Host 'innoiker doctor'
-Write-Host 'innoiker create my-project'
+Write-Host 'inno doctor'
+Write-Host 'inno create my-project'
