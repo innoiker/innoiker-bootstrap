@@ -26,11 +26,15 @@ def _command(name: str, *extra: str) -> list[str]:
 
 
 def run(command: list[str], *, cwd: Path | None = None) -> None:
-    subprocess.run(command, cwd=cwd, check=True)
+    env = os.environ.copy()
+    env.setdefault("PIP_DISABLE_PIP_VERSION_CHECK", "1")
+    subprocess.run(command, cwd=cwd, check=True, env=env)
 
 
 def command_output(command: list[str]) -> str:
-    return subprocess.check_output(command, text=True, stderr=subprocess.STDOUT).strip()
+    env = os.environ.copy()
+    env.setdefault("PIP_DISABLE_PIP_VERSION_CHECK", "1")
+    return subprocess.check_output(command, text=True, stderr=subprocess.STDOUT, env=env).strip()
 
 
 def ensure_asdf() -> None:
@@ -89,6 +93,10 @@ def seed_agent_os_profile(config: Config) -> None:
 def ensure_agent_os(config: Config, expected_ref: str) -> None:
     root = config.agent_os_dir
     if not (root / ".git").is_dir():
+        if root.exists() and any(root.iterdir()):
+            raise RuntimeError(
+                f"Agent OS 경로가 Git 저장소가 아니며 비어 있지 않습니다: {root}"
+            )
         root.parent.mkdir(parents=True, exist_ok=True)
         run(["git", "clone", "https://github.com/buildermethods/agent-os.git", str(root)])
     run(["git", "-C", str(root), "fetch", "origin", expected_ref])

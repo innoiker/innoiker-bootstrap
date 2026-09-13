@@ -63,6 +63,7 @@ install_asdf() {
 
 prepare_path() {
   export PATH="$BIN_DIR:$HOME/.asdf/shims:$PATH"
+  export PIP_DISABLE_PIP_VERSION_CHECK=1
 }
 
 clone_bootstrap() {
@@ -82,8 +83,8 @@ install_bootstrap_cli() {
   asdf install nodejs 24.20.0
   asdf set -u python 3.14.7
   asdf set -u nodejs 24.20.0
-  asdf exec python -m pip install --upgrade 'pip<26'
-  asdf exec python -m pip install --force-reinstall "$INSTALL_ROOT"
+  PIP_DISABLE_PIP_VERSION_CHECK=1 asdf exec python -m pip install --upgrade 'pip<26'
+  PIP_DISABLE_PIP_VERSION_CHECK=1 asdf exec python -m pip install --force-reinstall "$INSTALL_ROOT"
 
   # 설치된 Python이 실제로 사용하는 scripts 디렉터리를 기준으로
   # console script를 확인한다. asdf shim이나 현재 셸의 PATH에는 의존하지 않는다.
