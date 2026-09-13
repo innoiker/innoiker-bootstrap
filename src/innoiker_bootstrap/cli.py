@@ -45,7 +45,13 @@ def command_bootstrap(config: Config) -> int:
     ensure_template_checkout(config.template_cache, config.template_url, config.template_ref)
     toolchain = read_toolchain_lock(config.organization_repo)
     template_tools = read_template_tool_versions(config.template_cache)
-    ensure_runtimes({"python": template_tools["python"], "nodejs": template_tools["nodejs"]})
+    for name in ("python", "nodejs"):
+        if template_tools[name] != getattr(toolchain, name):
+            raise ValueError(
+                f"toolchain 충돌: Organization toolchain.lock의 {name}={getattr(toolchain, name)}와 "
+                f"template .tool-versions의 {name}={template_tools[name]}가 다릅니다"
+            )
+    ensure_runtimes({"python": toolchain.python, "nodejs": toolchain.nodejs})
     ensure_python_tools(toolchain)
     ensure_openspec(toolchain)
     ensure_agent_os(config, toolchain.agent_os_ref)

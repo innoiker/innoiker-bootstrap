@@ -36,9 +36,23 @@ def check(config: Config, toolchain: Toolchain, template_tools: dict[str, str] |
     if (config.organization_repo / ".git").is_dir():
         checks["organization"]["revision"] = current_revision(config.organization_repo)
     if template_tools:
+        checks["toolchain_template_contract"] = {
+            "ok": all(
+                template_tools[name] == getattr(toolchain, name)
+                for name in ("python", "nodejs")
+            ),
+            "organization": {
+                "python": toolchain.python,
+                "nodejs": toolchain.nodejs,
+            },
+            "template": {
+                "python": template_tools["python"],
+                "nodejs": template_tools["nodejs"],
+            },
+        }
         expected = {
-            "python": template_tools["python"],
-            "nodejs": template_tools["nodejs"],
+            "python": toolchain.python,
+            "nodejs": toolchain.nodejs,
             "copier": toolchain.copier,
             "openspec": toolchain.openspec,
         }

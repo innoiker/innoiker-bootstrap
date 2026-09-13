@@ -16,7 +16,7 @@ class Toolchain:
     agent_os_ref: str
 
 
-_REQUIRED = ("copier", "openspec", "agent_os")
+_REQUIRED = ("python", "nodejs", "copier", "openspec", "agent_os_version", "agent_os_ref")
 
 
 def _run(command: list[str], cwd: Path | None = None) -> str:
@@ -24,6 +24,7 @@ def _run(command: list[str], cwd: Path | None = None) -> str:
 
 
 def read_toolchain_lock(organization_repo: Path) -> Toolchain:
+    """Organization toolchain.lock을 명시적 버전/참조 계약으로 읽는다."""
     path = organization_repo / "toolchain.lock"
     if not path.is_file():
         raise FileNotFoundError(f"Organization toolchain.lock 없음: {path}")
@@ -36,16 +37,16 @@ def read_toolchain_lock(organization_repo: Path) -> Toolchain:
     missing = [key for key in _REQUIRED if key not in values]
     if missing:
         raise ValueError(f"toolchain.lock 필수 항목 없음: {', '.join(missing)}")
-    agent_os_value = values["agent_os"]
-    agent_os = agent_os_value.split("(", 1)[0].strip()
-    ref_match = re.search(r"/\s*([0-9a-f]{40})\s*\)", agent_os_value)
-    agent_os_ref = ref_match.group(1) if ref_match else agent_os
+    agent_os_version = values["agent_os_version"]
+    agent_os_ref = values["agent_os_ref"]
+    if not re.fullmatch(r"[0-9a-f]{40}", agent_os_ref):
+        raise ValueError("toolchain.lock의 agent_os_ref는 40자리 Git commit SHA여야 합니다")
     return Toolchain(
-        python=values.get("python", ""),
-        nodejs=values.get("nodejs", ""),
+        python=values["python"],
+        nodejs=values["nodejs"],
         copier=values["copier"],
         openspec=values["openspec"],
-        agent_os=agent_os,
+        agent_os=agent_os_version,
         agent_os_ref=agent_os_ref,
     )
 

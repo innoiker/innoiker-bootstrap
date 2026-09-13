@@ -103,7 +103,7 @@ innoiker create my-project --platforms android,web,server
 2. Bootstrapper는 프로젝트를 자동으로 GitHub에 생성하지 않는다. 로컬 프로젝트 생성까지만 수행한다.
 3. Git 인증/SSH credential은 자동 생성하거나 저장하지 않는다. private Organization 접근이 필요한 경우 기존 Git credential을 사용한다.
 4. shell startup 파일을 자동 수정하지 않는다. 설치 스크립트는 실행 중 필요한 PATH를 자체 구성하고, 사용자가 새 셸에서 `innoiker`를 사용하도록 안내한다.
-5. Tool version은 Organization `toolchain.lock`을 SoT로 사용한다. template의 `.tool-versions`와 충돌하는 경우 bootstrap을 실패시킨다.
+5. Tool version은 Organization `toolchain.lock`을 SoT로 사용한다. `python`과 `nodejs`는 template의 `.tool-versions`와 정확히 일치해야 하며, 충돌하는 경우 bootstrap을 실패시킨다.
 6. Agent OS profile은 template의 현재 계약대로 `INNOIKER_AGENT_OS_PROFILE`이 있으면 그것을 사용하고, 없으면 `organization_profile`과 같은 이름을 사용한다. Bootstrap 시 해당 이름이 없으면 Agent OS의 `default` profile을 그 이름으로 초기화한다. 생성 이후 template은 그 이름을 계속 사용하며 다른 profile로 자동 fallback하지 않는다.
 
 ## 공식 설치
