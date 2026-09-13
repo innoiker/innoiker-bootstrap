@@ -45,6 +45,8 @@ def create_project(config: Config, project_name: str, project_dir: Path | None, 
     command = [
         "asdf",
         "exec",
+        "python",
+        "-m",
         "copier",
         "copy",
         "--vcs-ref",

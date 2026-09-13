@@ -13,7 +13,7 @@ def check(config: Config, toolchain: Toolchain, template_tools: dict[str, str] |
         "asdf": ["asdf", "version"],
         "python": ["asdf", "exec", "python", "--version"],
         "nodejs": ["asdf", "exec", "node", "--version"],
-        "copier": ["asdf", "exec", "copier", "--version"],
+        "copier": ["asdf", "exec", "python", "-m", "copier", "--version"],
         "openspec": ["asdf", "exec", "openspec", "--version"],
     }
     for name, command in commands.items():

@@ -118,7 +118,7 @@ def verify_host(config: Config, toolchain: Toolchain) -> dict[str, str]:
         "asdf": command_output(_command("asdf", "version")),
         "python": command_output(_command("asdf", "exec", "python", "--version")),
         "nodejs": command_output(_command("asdf", "exec", "node", "--version")),
-        "copier": command_output(_command("asdf", "exec", "copier", "--version")),
+        "copier": command_output(_command("asdf", "exec", "python", "-m", "copier", "--version")),
         "openspec": command_output(_command("asdf", "exec", "openspec", "--version")),
         "agent_os_profile": config.agent_os_profile,
     }
