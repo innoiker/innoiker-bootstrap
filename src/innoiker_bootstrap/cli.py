@@ -9,7 +9,7 @@ from . import __version__
 from .config import Config, build_config
 from .create import create_project
 from .doctor import check, healthy
-from .environment import ensure_openspec, ensure_python_tools, ensure_runtimes, verify_host
+from .environment import ensure_openspec, ensure_python_tools, ensure_runtimes
 from .organization import ensure_checkout, ensure_template_checkout
 from .toolchain import read_template_tool_versions, read_toolchain_lock
 
@@ -19,8 +19,6 @@ def _add_common(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--organization-url")
     parser.add_argument("--organization-ref")
     parser.add_argument("--organization-profile")
-    parser.add_argument("--agent-os-dir")
-    parser.add_argument("--agent-os-profile")
     parser.add_argument("--template-url")
     parser.add_argument("--template-ref")
     parser.add_argument("--platforms")
@@ -32,8 +30,6 @@ def _config(args: argparse.Namespace) -> Config:
         organization_url=args.organization_url,
         organization_ref=args.organization_ref,
         organization_profile=args.organization_profile,
-        agent_os_dir=args.agent_os_dir,
-        agent_os_profile=args.agent_os_profile,
         template_url=args.template_url,
         template_ref=args.template_ref,
         platforms=args.platforms,

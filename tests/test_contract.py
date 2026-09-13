@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import os
-from pathlib import Path
-
 import unittest
 
 from innoiker_bootstrap.config import build_config, parse_platforms
@@ -27,18 +24,6 @@ class ContractTests(unittest.TestCase):
 
     def test_slug_is_stable(self) -> None:
         self.assertEqual(normalize_slug("My Project"), "my-project")
-
-    def test_agent_os_profile_follows_organization_profile(self) -> None:
-        config = build_config(organization_profile="company")
-        self.assertEqual(config.agent_os_profile, "company")
-
-    def test_agent_os_profile_can_be_explicit(self) -> None:
-        os.environ["INNOIKER_AGENT_OS_PROFILE"] = "custom"
-        try:
-            config = build_config(organization_profile="company")
-            self.assertEqual(config.agent_os_profile, "custom")
-        finally:
-            os.environ.pop("INNOIKER_AGENT_OS_PROFILE", None)
 
 
 if __name__ == "__main__":

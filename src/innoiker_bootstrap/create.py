@@ -37,8 +37,6 @@ def create_project(config: Config, project_name: str, project_dir: Path | None, 
     env.update(
         {
             "INNOIKER_ORGANIZATION_REPO": str(config.organization_repo),
-            "INNOIKER_AGENT_OS": str(config.agent_os_dir),
-            "INNOIKER_AGENT_OS_PROFILE": config.agent_os_profile,
             "PLATFORMS": ",".join(config.platforms),
         }
     )

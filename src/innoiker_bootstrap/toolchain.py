@@ -12,11 +12,9 @@ class Toolchain:
     nodejs: str
     copier: str
     openspec: str
-    agent_os: str
-    agent_os_ref: str
 
 
-_REQUIRED = ("python", "nodejs", "copier", "openspec", "agent_os_version", "agent_os_ref")
+_REQUIRED = ("python", "nodejs", "copier", "openspec")
 
 
 def _run(command: list[str], cwd: Path | None = None) -> str:
@@ -37,17 +35,11 @@ def read_toolchain_lock(organization_repo: Path) -> Toolchain:
     missing = [key for key in _REQUIRED if key not in values]
     if missing:
         raise ValueError(f"toolchain.lock 필수 항목 없음: {', '.join(missing)}")
-    agent_os_version = values["agent_os_version"]
-    agent_os_ref = values["agent_os_ref"]
-    if not re.fullmatch(r"[0-9a-f]{40}", agent_os_ref):
-        raise ValueError("toolchain.lock의 agent_os_ref는 40자리 Git commit SHA여야 합니다")
     return Toolchain(
         python=values["python"],
         nodejs=values["nodejs"],
         copier=values["copier"],
         openspec=values["openspec"],
-        agent_os=agent_os_version,
-        agent_os_ref=agent_os_ref,
     )
 
 

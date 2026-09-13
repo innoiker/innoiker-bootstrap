@@ -77,8 +77,6 @@ innoiker create my-project --platforms android,web,server
 - `--organization-url URL`
 - `--organization-ref REF`
 - `--organization-profile NAME`
-- `--agent-os-dir PATH`
-- `--agent-os-profile NAME`
 - `--template-url URL`
 - `--template-ref REF`
 - `--platforms LIST`
@@ -103,7 +101,7 @@ innoiker create my-project --platforms android,web,server
 3. Git 인증/SSH credential은 자동 생성하거나 저장하지 않는다. private Organization 접근이 필요한 경우 기존 Git credential을 사용한다.
 4. shell startup 파일을 자동 수정하지 않는다. 설치 스크립트는 실행 중 필요한 PATH를 자체 구성하고, 사용자가 새 셸에서 `innoiker`를 사용하도록 안내한다.
 5. Tool version은 Organization `toolchain.lock`을 SoT로 사용한다. `python`과 `nodejs`는 template의 `.tool-versions`와 정확히 일치해야 하며, 충돌하는 경우 bootstrap을 실패시킨다.
-6. Agent runtime은 bootstrap이 선택하거나 고정하지 않는다. 생성 프로젝트의 Agent Skills는 Agent Skills 형식으로 materialize되며, 작업마다 호환되는 Agent를 독립적으로 선택할 수 있다. 기존 `INNOIKER_AGENT_OS` 및 `INNOIKER_AGENT_OS_PROFILE` 설정은 호환성을 위해 유지하지만 bootstrap의 필수 조건이 아니다.
+6. Agent runtime은 bootstrap이 선택하거나 고정하지 않는다. 생성 프로젝트의 Agent Skills는 Agent Skills 형식으로 materialize되며, 작업마다 호환되는 Agent를 독립적으로 선택할 수 있다.
 
 ## 공식 설치
 

@@ -10,8 +10,6 @@ DEFAULT_TEMPLATE_URL = "https://github.com/innoiker/innoiker-copier-template.git
 DEFAULT_ORGANIZATION_REF = "main"
 DEFAULT_TEMPLATE_REF = "main"
 DEFAULT_ORGANIZATION_PROFILE = "innoiker"
-DEFAULT_AGENT_OS_DIR = Path.home() / "agent-os"
-DEFAULT_AGENT_OS_PROFILE = ""
 DEFAULT_PLATFORMS = "android"
 SUPPORTED_PLATFORMS = ("android", "web", "server")
 
@@ -22,8 +20,6 @@ class Config:
     organization_url: str
     organization_ref: str
     organization_profile: str
-    agent_os_dir: Path
-    agent_os_profile: str
     template_url: str
     template_ref: str
     template_cache: Path
@@ -53,22 +49,16 @@ def build_config(
     organization_url: str | None = None,
     organization_ref: str | None = None,
     organization_profile: str | None = None,
-    agent_os_dir: str | None = None,
-    agent_os_profile: str | None = None,
     template_url: str | None = None,
     template_ref: str | None = None,
     platforms: str | None = None,
 ) -> Config:
     org_profile = organization_profile or _env("INNOIKER_ORGANIZATION_PROFILE", DEFAULT_ORGANIZATION_PROFILE)
-    requested_agent_profile = agent_os_profile or _env("INNOIKER_AGENT_OS_PROFILE", DEFAULT_AGENT_OS_PROFILE)
-    resolved_agent_profile = requested_agent_profile or org_profile
     return Config(
         organization_repo=Path(organization_repo or _env("INNOIKER_ORGANIZATION_REPO", str(Path.home() / "work/innoiker-organization"))).expanduser(),
         organization_url=organization_url or _env("INNOIKER_ORGANIZATION_URL", DEFAULT_ORGANIZATION_URL),
         organization_ref=organization_ref or _env("INNOIKER_ORGANIZATION_REF", DEFAULT_ORGANIZATION_REF),
         organization_profile=org_profile,
-        agent_os_dir=Path(agent_os_dir or _env("INNOIKER_AGENT_OS", str(DEFAULT_AGENT_OS_DIR))).expanduser(),
-        agent_os_profile=resolved_agent_profile,
         template_url=template_url or _env("INNOIKER_TEMPLATE_URL", DEFAULT_TEMPLATE_URL),
         template_ref=template_ref or _env("INNOIKER_TEMPLATE_REF", DEFAULT_TEMPLATE_REF),
         template_cache=Path(_env("INNOIKER_TEMPLATE_CACHE", str(Path.home() / ".innoiker" / "template"))).expanduser(),
